@@ -80,7 +80,7 @@ DETALLE VITAL a defender ante el docente:
 ## 5. Guia GitHub (subir todo)
 
 ```bash
-cd ia-project-ufg
+cd parcial-inventario-ollama
 git init -b main
 git add main.py requirements.txt README.md .gitignore assets/ docs/
 git commit -m "feat: asistente inventario ferreteria PYME con Ollama local 3B"
