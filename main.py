@@ -39,12 +39,11 @@ SYSTEM_PROMPT = (
     "Usa listas y ejemplos con numeros cuando sea util."
 )
 
-# EDITAR: nombres reales del equipo
 INTEGRANTES = [
-    "Integrante 1 - Nombre Apellido",
-    "Integrante 2 - Nombre Apellido",
-    "Integrante 3 - Nombre Apellido",
-    "Integrante 4 - Nombre Apellido",
+    "Omar Esaú Fuentes Gonzalez - FG100222",
+    "Andrea Saraí Durán Chamul - DC100223",
+    "Fabio Alejandro Ordoñez Cerritos - OC100122",
+    "José Rodolfo Vargas Blanco - VB100222",
 ]
 
 # Paleta enfoque ferreteria PYME (acero + naranja herramienta + carton)
