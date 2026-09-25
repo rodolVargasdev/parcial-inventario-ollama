@@ -40,7 +40,20 @@ Flujo: el usuario escribe una consulta, el botón Enviar llama a ollama.chat, la
 - pillow 12.3.0: para mostrar la foto JPEG.
 - Tkinter viene incluido con Python.
 
-## 6. Posibles mejoras
+## 6. Generar el ejecutable
+
+El archivo AsistenteInventario.exe se genera con PyInstaller 6.22.3, desde la carpeta entrega:
+
+```
+pip install pyinstaller==6.22.3
+python -m PyInstaller --onefile --windowed --name AsistenteInventario --distpath . main.py
+```
+
+- --onefile empaqueta todo en un solo archivo y --windowed evita que se abra la consola negra.
+- La constante CARPETA usa la ubicación del .exe cuando el programa está compilado (sys.frozen), porque en ese caso __file__ apunta a una carpeta temporal. Así encuentra la carpeta "foto integrantes".
+- Ollama no se incluye en el .exe: debe estar instalado y abierto en la computadora.
+
+## 7. Posibles mejoras
 
 - Mostrar la respuesta por partes con stream=True.
 - Guardar el inventario real en una base sqlite3.

@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from pathlib import Path
+import sys
 import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
@@ -28,6 +29,9 @@ CONTEXTO = (
     "Leche en polvo 400 g: 5 unidades (mínimo 8, vence en 20 días). "
     "Café molido 250 g: 25 unidades (mínimo 10)."
 )
+
+# Carpeta del programa: junto al .exe si está compilado, o junto a main.py
+CARPETA = Path(sys.executable).parent if getattr(sys, "frozen", False) else Path(__file__).parent
 
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
@@ -254,7 +258,7 @@ class InventarioApp:
                 "Para mostrar fotografias JPEG instala Pillow con: pip install Pillow",
             )
             return
-        directorio_fotos = Path(__file__).parent / "foto integrantes"
+        directorio_fotos = CARPETA / "foto integrantes"
         fotos = list(directorio_fotos.glob("*.jp*g")) + list(directorio_fotos.glob("*.png"))
         
         if not fotos:

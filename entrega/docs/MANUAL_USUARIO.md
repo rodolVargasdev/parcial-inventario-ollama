@@ -41,6 +41,14 @@ pip install -r requirements.txt
 
 ## 5. Cómo abrir el programa
 
+### Opción rápida: AsistenteInventario.exe
+1. Verifique que Ollama esté abierto y que el modelo esté descargado (ollama pull qwen3.5:0.8b).
+2. Haga doble clic en AsistenteInventario.exe. No necesita Python instalado.
+3. Mantenga la carpeta "foto integrantes" junto al .exe para que se vea la foto.
+4. Si Windows muestra "Windows protegió su PC", presione "Más información" y luego "Ejecutar de todas formas"; aparece porque el .exe no tiene firma digital.
+
+### Opción con Python
+
 1. Verifique que Ollama esté abierto (su ícono aparece junto al reloj de Windows).
 2. En la carpeta del proyecto ejecute:
 
