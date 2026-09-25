@@ -4,3 +4,4 @@ __pycache__/
 venv/
 consulta_inventario_*.txt
 *.jpeg
+.atl/
