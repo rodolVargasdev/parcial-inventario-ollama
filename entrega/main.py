@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from pathlib import Path
+import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
@@ -18,7 +19,14 @@ MODELO = "qwen3.5:0.8b"
 CONTEXTO = (
     "Eres un asistente de inventario para pequeñas empresas (PYMES) de El Salvador. "
     "Ayudas con existencias, productos con bajo stock, compras, proveedores, ventas "
-    "y fechas de vencimiento. Responde en español, de forma breve y práctica."
+    "y fechas de vencimiento. Responde en español, de forma breve y práctica. "
+    "Este es el inventario actual de la empresa: "
+    "Arroz 1 lb: 45 unidades (mínimo 20). "
+    "Frijol rojo 1 lb: 8 unidades (mínimo 15). "
+    "Aceite 1 L: 30 unidades (mínimo 10). "
+    "Azúcar 5 lb: 12 unidades (mínimo 10). "
+    "Leche en polvo 400 g: 5 unidades (mínimo 8, vence en 20 días). "
+    "Café molido 250 g: 25 unidades (mínimo 10)."
 )
 
 WINDOW_WIDTH = 600
@@ -151,12 +159,13 @@ class InventarioApp:
         self.entrada = ttk.Entry(entrada_marco)
         self.entrada.pack(side="left", fill="x", expand=True)
         self.entrada.bind("<Return>", lambda _event: self.enviar_consulta())
-        ttk.Button(
+        self.boton_enviar = ttk.Button(
             entrada_marco,
             text="Enviar",
             style="Primary.TButton",
             command=self.enviar_consulta,
-        ).pack(side="left", padx=(8, 0))
+        )
+        self.boton_enviar.pack(side="left", padx=(8, 0))
 
         acciones = tk.Frame(contenido, bg=COLORS["background"])
         acciones.pack(fill="x")
@@ -185,6 +194,7 @@ class InventarioApp:
         try:
             respuesta = ollama.chat(
                 model=MODELO,
+                think=False,  # sin razonamiento previo: responde mucho más rápido
                 messages=[
                     {"role": "system", "content": CONTEXTO},
                     {"role": "user", "content": consulta},
@@ -205,10 +215,18 @@ class InventarioApp:
             return
         self.agregar_mensaje("Tu", consulta, "usuario")
         self.entrada.delete(0, "end")
-        self.root.config(cursor="watch")
-        self.root.update()
-        self.agregar_mensaje("Asistente", self.obtener_respuesta(consulta), "asistente")
-        self.root.config(cursor="")
+        self.boton_enviar.config(state="disabled", text="Pensando...")
+        # La consulta corre en otro hilo para que la ventana no se congele
+        threading.Thread(target=self.consultar_en_segundo_plano, args=(consulta,), daemon=True).start()
+
+    def consultar_en_segundo_plano(self, consulta):
+        respuesta = self.obtener_respuesta(consulta)
+        # Tkinter solo se modifica desde el hilo principal
+        self.root.after(0, self.mostrar_respuesta, respuesta)
+
+    def mostrar_respuesta(self, respuesta):
+        self.agregar_mensaje("Asistente", respuesta, "asistente")
+        self.boton_enviar.config(state="normal", text="Enviar")
 
     def guardar_conversacion(self):
         if not self.conversacion:

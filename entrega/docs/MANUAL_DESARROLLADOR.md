@@ -1,54 +1,47 @@
 # Manual del desarrollador
 
-Asistente de Inventario para PYMES con Ollama local.
+Asistente de Inventario PYME con Ollama local.
 
 ## 1. Visión general
 
-Todo el programa está en un solo archivo, main.py, escrito con Python, Tkinter y la librería ollama, siguiendo el estilo de los ejemplos vistos en clase (ollama1.py a ollama5.py).
+El programa está en un solo archivo, main.py, escrito con Python, Tkinter (con widgets ttk) y la librería ollama. Se ejecuta 100% en local con el modelo destilado qwen3.5:0.8b, de menos de 3B parámetros.
 
-Flujo: el usuario escribe una consulta, el botón Enviar llama a ollama.chat con el modelo qwen3.5:0.8b y la respuesta se muestra en el área de texto.
+Flujo: el usuario escribe una consulta, el botón Enviar llama a ollama.chat, la respuesta se agrega al historial y todo el historial se puede guardar en un .txt.
 
-No usa internet, ni base de datos, ni servicios en la nube.
+## 2. Configuración (inicio del archivo)
 
-## 2. Partes del código
+- MODELO: nombre del modelo de Ollama. Cambiarlo aquí cambia el modelo en todo el programa.
+- CONTEXTO: mensaje de sistema que le indica al modelo que actúe como asistente de inventario para PYMES e incluye un inventario de ejemplo (arroz, frijol, aceite, azúcar, leche en polvo y café) para que pueda responder preguntas como "¿cuál es el inventario que tenemos?".
+- WINDOW_WIDTH y WINDOW_HEIGHT: 600x600, tamaño exigido. La ventana no se puede redimensionar.
+- COLORS: paleta verde azulado con fondo claro, asociada a orden, confianza y control, adecuada para un asistente de inventario.
 
-### 2.1 Configuración
-- MODELO = "qwen3.5:0.8b": modelo destilado de menos de 3B parámetros, el mismo de la guía de clase.
-- INTEGRANTES: lista con nombre y carné de cada integrante.
-- CONTEXTO: mensaje de sistema que le indica al modelo que actúe como asistente de inventario de una ferretería. Sin este mensaje el modelo responde de forma genérica.
-- CARPETA: ruta donde está main.py, para encontrar la foto y guardar los .txt aunque el programa se ejecute desde otra carpeta.
+## 3. Clase InventarioApp
 
-### 2.2 Función enviar()
-- Valida que el campo no esté vacío.
-- Cambia la etiqueta de estado a "Consultando..." y llama root.update() para que se vea el cambio antes de esperar al modelo.
-- Llama ollama.chat con dos mensajes: el de sistema (CONTEXTO) y el del usuario.
-- Agrega la pregunta y la respuesta al área de texto.
-- Si Ollama no está abierto o el modelo no está descargado, muestra el error en un messagebox.
+- __init__: crea la ventana, fija el tamaño y construye estilos e interfaz. Guarda la conversación en la lista self.conversacion.
+- construir_estilos: define los estilos ttk del botón principal y de los secundarios.
+- construir_interfaz: arma el encabezado, el historial (Text de solo lectura con barra de desplazamiento), el campo de consulta, el botón Enviar y los botones de guardar e integrantes. La tecla Enter también envía.
+- agregar_mensaje: inserta un mensaje en el historial y lo guarda en self.conversacion.
+- obtener_respuesta: llama a ollama.chat con el CONTEXTO, la consulta y think=False. Si Ollama no está abierto o falta el modelo, devuelve un mensaje con la solución en lugar de cerrar el programa.
+- enviar_consulta: valida que la consulta no esté vacía, la muestra, desactiva el botón (que dice "Pensando...") y lanza la consulta en un hilo aparte.
+- consultar_en_segundo_plano y mostrar_respuesta: el hilo espera al modelo y, con root.after, devuelve la respuesta al hilo principal, que es el único que puede modificar la ventana.
+- guardar_conversacion: abre un cuadro para elegir dónde guardar (por defecto documento.txt) y escribe la fecha y toda la conversación en UTF-8.
+- mostrar_integrantes: abre una ventana nueva con la primera imagen de la carpeta "foto integrantes" y los nombres y carnés del grupo. La imagen se guarda en self.imagen_referencia porque, si no se guarda una referencia, Tkinter la borra y no aparece.
 
-Detalle importante: ollama.chat espera la respuesta completa, por lo que la ventana queda ocupada mientras el modelo responde. Se eligió así por simplicidad, igual que en ollama5.py.
+## 4. Detalles importantes
 
-### 2.3 Función guardar()
-- Toma todo el texto del área de respuestas.
-- Lo guarda en un archivo consulta_AAAAMMDD_HHMMSS.txt junto a main.py, con codificación UTF-8.
+- La consulta corre en un hilo aparte (threading) para que la ventana no se congele mientras el modelo responde.
+- think=False desactiva el razonamiento previo de qwen3.5. En pruebas del 24/09/2026, la misma pregunta tardó 68.9 s con razonamiento y 7.3 s sin él.
+- Si Pillow no está instalado, el botón de integrantes muestra un aviso en lugar de fallar.
+- No se usa internet, base de datos ni servicios en la nube.
 
-### 2.4 Función ver_integrantes()
-- Abre una ventana nueva (Toplevel).
-- Si existe assets/foto.jpg, la muestra reducida con Pillow. La imagen se guarda en ventana.foto porque, si no se guarda una referencia, Tkinter la borra y no aparece.
-- Muestra los nombres y carnés de INTEGRANTES.
-
-### 2.5 Ventana principal
-- Tamaño fijo de 600x600 con resizable(False, False).
-- Colores verdes, asociados a orden, control y dinero, adecuados para un asistente de inventario.
-- Controles: título, campo de consulta, botón Enviar consulta, área de respuestas, botones Guardar en .txt y Ver integrantes, y etiqueta de estado.
-
-## 3. Dependencias
+## 5. Dependencias
 
 - ollama 0.6.2: cliente para hablar con el servidor Ollama local.
-- pillow 12.3.0: para mostrar la foto JPG.
+- pillow 12.3.0: para mostrar la foto JPEG.
 - Tkinter viene incluido con Python.
 
-## 4. Posibles mejoras
+## 6. Posibles mejoras
 
-- Mostrar la respuesta por partes con stream=True, como en ollama2.py.
-- Guardar el inventario en una base sqlite3.
-- Permitir elegir el modelo desde una lista.
+- Mostrar la respuesta por partes con stream=True.
+- Guardar el inventario real en una base sqlite3.
+- Enviar el historial completo al modelo para que recuerde la conversación.

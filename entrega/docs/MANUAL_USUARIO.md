@@ -1,112 +1,88 @@
-# MANUAL DE USUARIO - Asistente de Inventario para Ferreterias PYME
-### Parte II-2 + Parte III (35% + 30%)
+# Manual de usuario
 
-## 1. Que es
+Asistente de Inventario PYME con Ollama local.
 
-Software de escritorio que responde preguntas de inventario ferretero usando
-inteligencia artificial 100% local (sin internet, sin nube). Te ayuda con:
+## 1. Qué es
 
-- Registrar stock inicial por pasillo/estante (ej: Pasillo A: tornilleria)
-- Definir stock minimo de alta rotacion (tornillos, discos 4 1/2, cemento, PVC)
-- Calcular costo unitario y precio de venta
-- Controlar entradas/salidas y alertas de agotado
-- Hacer inventario fisico y reportes simples
+Un programa de escritorio que responde preguntas sobre el inventario de una pequeña empresa: existencias, productos con bajo stock, compras, proveedores, ventas y vencimientos. Funciona sin internet, con un modelo de inteligencia artificial que se ejecuta en la propia computadora.
 
-Ejemplo: *"Tengo 200 tornillos de 1/4 y vendo 30 por semana, cual es mi stock minimo?"*
+## 2. Características de la computadora
 
-## 2. Caracteristicas de la computadora (Parte III)
+| Componente | Mínimo | Recomendado |
+|---|---|---|
+| Sistema operativo | Windows 10 de 64 bits | Windows 11 |
+| Procesador | 4 núcleos | 6 núcleos o más |
+| Memoria RAM | 8 GB | 16 GB |
+| Espacio en disco | 5 GB libres | 10 GB libres |
+| Tarjeta de video | No es necesaria | Opcional, acelera las respuestas |
 
-### Minimo para aprobar en clase
-- OS: Windows 10/11 64-bit
-- CPU: i3 / Ryzen 3 o superior
-- RAM: 8 GB (el modelo 3B usa ~2-3 GB + Windows + Python)
-- Disco: 5 GB libres (Ollama ~2 GB + modelo qwen3.5:0.8b ~1 GB + Python)
-- Pantalla: 1024x768 o superior (la app es fija 600x600)
-- No requiere GPU ni internet para usar (solo para instalar)
+## 3. Programas necesarios
 
-### Recomendado ferreteria real
-- RAM 12-16 GB para respuestas mas rapidas
-- SSD para carga del modelo en <10 seg
+- Python 3.10 o superior (https://www.python.org/downloads), marcando la opción "Add Python to PATH" al instalar.
+- Ollama (https://ollama.com/download).
+- El modelo qwen3.5:0.8b, de menos de 3B parámetros.
+- Las librerías del archivo requirements.txt: ollama y pillow.
 
-## 3. Caracteristicas para el funcionamiento del proyecto
+## 4. Instalación (una sola vez)
 
-1. **Ollama instalado y corriendo.** Descargar de https://ollama.com/download
-2. **Modelo <=3B descargado:**
-   ```
-   ollama pull qwen3.5:0.8b
-   ollama list
-   ```
-   Alternativas validas (<=3B): `llama3.2:3b`, `tinyllama:1.1b`
-3. **Python 3.10+ + dependencias:**
-   ```
-   pip install -r requirements.txt
-   ```
-4. **Archivos:** `main.py`, `assets/foto.jpg` (foto grupal)
+1. Instale Python y Ollama.
+2. Abra una terminal en la carpeta del proyecto.
+3. Descargue el modelo:
 
-Todo el proceso es local: tu consulta NUNCA sale a internet.
-
-## 4. Como abrir el programa (Ejecutarlo)
-
-### Opcion A - Doble clic / clase
-1. Instala Ollama y ejecuta `ollama pull qwen3.5:0.8b` una sola vez.
-2. Abre terminal en la carpeta del proyecto.
-3. Ejecuta:
-   ```
-   python main.py
-   ```
-4. Se abre ventana 600x600 titulada "Asistente de Inventario - Ferreteria PYME".
-
-### Opcion B - Verificar antes de exponer
 ```
-ollama list        # debe aparecer qwen3.5:0.8b
-python -m py_compile main.py
+ollama pull qwen3.5:0.8b
+```
+
+4. Instale las librerías:
+
+```
+pip install -r requirements.txt
+```
+
+## 5. Cómo abrir el programa
+
+1. Verifique que Ollama esté abierto (su ícono aparece junto al reloj de Windows).
+2. En la carpeta del proyecto ejecute:
+
+```
 python main.py
 ```
 
-## 5. Uso paso a paso
+3. Se abre la ventana "Asistente de Inventario PYME" de 600x600.
 
-### Ventana principal (600x600)
-- **Título:** nombre del asistente.
-- **Área blanca central:** preguntas y respuestas.
-- **Consulta:** campo de texto + botón verde **Enviar consulta**.
-- **Botonera:** **Guardar en .txt** + **Ver integrantes**.
+## 6. Uso
 
-### Enviar consulta
-1. Escribe en el campo de consulta, por ejemplo: *"Como ordeno mi bodega por pasillos?"*
-2. Presiona **Enviar consulta**.
-3. Abajo aparece "Consultando a Ollama..." mientras el modelo responde.
-4. La respuesta aparece como "Respuesta:" debajo de la pregunta.
+### Hacer una consulta
+1. Escriba la pregunta en el campo "Escribe una consulta sobre tu inventario".
+2. Presione Enviar o la tecla Enter.
+3. El botón cambia a "Pensando..." mientras el modelo responde; la ventana se puede seguir moviendo. La primera consulta puede tardar más.
+4. La respuesta aparece en el historial como "Asistente".
 
-Buenas preguntas ferreteras para la demo:
-- "Ficha para registrar un martillo Stanley en inventario, dame formato"
-- "Vendo 2 quintales de cemento por semana, cuanto stock de seguridad dejo?"
-- "Como hago inventario fisico sin cerrar todo el dia?"
+Ejemplos:
+- ¿Cuál es el inventario que tenemos?
+- ¿Qué hago con los productos que tienen menos de 10 unidades?
+- ¿Cómo organizo las compras por proveedor?
+- ¿Cómo controlo los productos próximos a vencer?
 
-### Guardar en .txt
-1. Presiona **Guardar en .txt**.
-2. Se crea `consulta_FECHA.txt` en la carpeta del programa.
-3. El .txt incluye todas las preguntas y respuestas.
-4. Ideal como evidencia para el docente.
+### Guardar las consultas
+1. Presione "Guardar consultas en documento.txt".
+2. Elija la carpeta y el nombre (por defecto documento.txt).
+3. El archivo contiene la fecha y toda la conversación.
 
-### Ver integrantes
-1. Presiona **Ver integrantes**.
-2. Se abre ventana 400x450 con foto grupal (`assets/foto.jpg`) + nombres.
-3. Si aparece "(Falta la foto en assets/foto.jpg)", falta colocar la foto.
-
-## 6. Colores (justificación)
-- Fondo verde claro `#E8F0E8` y título verde oscuro: orden y control.
-- Botón Enviar verde `#2E7D5B`: acción principal visible.
+### Ver los integrantes
+1. Presione "Mostrar integrantes del grupo".
+2. Se abre una ventana con la foto del grupo y los nombres y carnés.
 
 ## 7. Problemas comunes
 
-| Sintoma | Causa | Solucion |
+| Síntoma | Causa | Solución |
 |---|---|---|
-| "Error de Ollama" | Ollama no instalado / modelo no descargado | Instala Ollama, `ollama pull qwen3.5:0.8b`, reintenta |
-| Ventana no abre / error `ollama` | Falta `pip install -r requirements.txt` | Ejecuta pip install |
-| Foto no aparece | No existe `assets/foto.jpg` | Coloca la foto como assets/foto.jpg |
-| Respuesta lenta (>30 seg) | PC 8GB + primer carga | Normal primera vez, luego acelera. Cierra Chrome/Excel |
-| Estado "Consultando..." | El modelo está pensando | Espere unos segundos |
+| "No se pudo consultar a Ollama" | Ollama cerrado o modelo no descargado | Abra Ollama y ejecute ollama pull qwen3.5:0.8b |
+| Error "No module named ollama" | Faltan las librerías | Ejecute pip install -r requirements.txt |
+| "Falta Pillow" | No se instaló pillow | Ejecute pip install -r requirements.txt |
+| "Imagen no encontrada" | La carpeta "foto integrantes" está vacía | Coloque la foto del grupo en esa carpeta |
+| Respuesta lenta | Primera carga del modelo o poca RAM | Espere y cierre otros programas pesados |
 
 ## 8. Privacidad
 
-100% offline. Inventario, precios y proveedores quedan en tu PC. El .txt solo se crea si presionas Guardar.
+Todo se procesa en la computadora. Ninguna consulta sale a internet, y el .txt solo se crea cuando se presiona el botón de guardar.
