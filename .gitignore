@@ -5,3 +5,4 @@ venv/
 consulta_*.txt
 *.jpeg
 .atl/
+!foto integrantes/*.jpeg
