@@ -20,7 +20,7 @@ Ejemplo: *"Tengo 200 tornillos de 1/4 y vendo 30 por semana, cual es mi stock mi
 - OS: Windows 10/11 64-bit
 - CPU: i3 / Ryzen 3 o superior
 - RAM: 8 GB (el modelo 3B usa ~2-3 GB + Windows + Python)
-- Disco: 5 GB libres (Ollama ~2 GB + modelo qwen2.5:3b ~1.9 GB + Python)
+- Disco: 5 GB libres (Ollama ~2 GB + modelo qwen3.5:0.8b ~1 GB + Python)
 - Pantalla: 1024x768 o superior (la app es fija 600x600)
 - No requiere GPU ni internet para usar (solo para instalar)
 
@@ -33,7 +33,7 @@ Ejemplo: *"Tengo 200 tornillos de 1/4 y vendo 30 por semana, cual es mi stock mi
 1. **Ollama instalado y corriendo.** Descargar de https://ollama.com/download
 2. **Modelo <=3B descargado:**
    ```
-   ollama pull qwen2.5:3b
+   ollama pull qwen3.5:0.8b
    ollama list
    ```
    Alternativas validas (<=3B): `llama3.2:3b`, `tinyllama:1.1b`
@@ -48,7 +48,7 @@ Todo el proceso es local: tu consulta NUNCA sale a internet.
 ## 4. Como abrir el programa (Ejecutarlo)
 
 ### Opcion A - Doble clic / clase
-1. Instala Ollama y ejecuta `ollama pull qwen2.5:3b` una sola vez.
+1. Instala Ollama y ejecuta `ollama pull qwen3.5:0.8b` una sola vez.
 2. Abre terminal en la carpeta del proyecto.
 3. Ejecuta:
    ```
@@ -58,7 +58,7 @@ Todo el proceso es local: tu consulta NUNCA sale a internet.
 
 ### Opcion B - Verificar antes de exponer
 ```
-ollama list        # debe aparecer qwen2.5:3b
+ollama list        # debe aparecer qwen3.5:0.8b
 python -m py_compile main.py
 python main.py
 ```
@@ -66,48 +66,46 @@ python main.py
 ## 5. Uso paso a paso
 
 ### Ventana principal (600x600)
-- **Header acero oscuro:** titulo + modelo local en uso.
-- **Area blanca central:** conversacion.
-- **Barra inferior:** campo de texto + boton naranja **Enviar**.
-- **Botonera:** **Guardar consulta (.txt)** (gris) + **Integrantes** (acero).
+- **Título:** nombre del asistente.
+- **Área blanca central:** preguntas y respuestas.
+- **Consulta:** campo de texto + botón verde **Enviar consulta**.
+- **Botonera:** **Guardar en .txt** + **Ver integrantes**.
 
 ### Enviar consulta
-1. Escribe en el campo inferior ej: *"Como ordeno mi bodega por pasillos?"*
-2. Presiona **Enviar** o Enter.
-3. El boton muestra "..." mientras piensa (no se congela).
-4. Respuesta aparece como "Asistente:".
+1. Escribe en el campo de consulta, por ejemplo: *"Como ordeno mi bodega por pasillos?"*
+2. Presiona **Enviar consulta**.
+3. Abajo aparece "Consultando a Ollama..." mientras el modelo responde.
+4. La respuesta aparece como "Respuesta:" debajo de la pregunta.
 
 Buenas preguntas ferreteras para la demo:
 - "Ficha para registrar un martillo Stanley en inventario, dame formato"
 - "Vendo 2 quintales de cemento por semana, cuanto stock de seguridad dejo?"
 - "Como hago inventario fisico sin cerrar todo el dia?"
 
-### Guardar consulta (.txt)
-1. Presiona **Guardar consulta (.txt)**.
-2. Elige carpeta y nombre (por defecto `consulta_inventario_FECHA.txt`).
-3. El .txt incluye fecha, modelo y toda la conversacion.
+### Guardar en .txt
+1. Presiona **Guardar en .txt**.
+2. Se crea `consulta_FECHA.txt` en la carpeta del programa.
+3. El .txt incluye todas las preguntas y respuestas.
 4. Ideal como evidencia para el docente.
 
 ### Ver integrantes
-1. Presiona **Integrantes**.
-2. Se abre ventana 400x480 con foto grupal (`assets/foto.jpg`) + nombres.
-3. Si ves el recuadro "[ Coloca tu foto... ]" es porque falta poner la foto.
+1. Presiona **Ver integrantes**.
+2. Se abre ventana 400x450 con foto grupal (`assets/foto.jpg`) + nombres.
+3. Si aparece "(Falta la foto en assets/foto.jpg)", falta colocar la foto.
 
-## 6. Colores (justificacion enfoque ferretero)
-- Header `#3D405B` acero oscuro: estanteria metalica, confianza profesional.
-- Boton Enviar `#E07A2C` naranja herramienta: visibilidad, accion (como cajas de herramientas Truper/Stanley).
-- Fondo `#F2EFE9` carton claro: cajas, facturas, ambiente ferretero.
-- Secundarios grises herramienta.
+## 6. Colores (justificación)
+- Fondo verde claro `#E8F0E8` y título verde oscuro: orden y control.
+- Botón Enviar verde `#2E7D5B`: acción principal visible.
 
 ## 7. Problemas comunes
 
 | Sintoma | Causa | Solucion |
 |---|---|---|
-| "No pude conectar con Ollama" | Ollama no instalado / modelo no descargado | Instala Ollama, `ollama pull qwen2.5:3b`, reintenta |
+| "Error de Ollama" | Ollama no instalado / modelo no descargado | Instala Ollama, `ollama pull qwen3.5:0.8b`, reintenta |
 | Ventana no abre / error `ollama` | Falta `pip install -r requirements.txt` | Ejecuta pip install |
-| Foto no aparece | No existe `assets/foto.jpg` | Coloca foto como .jpg o .png |
+| Foto no aparece | No existe `assets/foto.jpg` | Coloca la foto como assets/foto.jpg |
 | Respuesta lenta (>30 seg) | PC 8GB + primer carga | Normal primera vez, luego acelera. Cierra Chrome/Excel |
-| Boton Enviar en "..." | Esta pensando | Espera, usa threading para no congelar |
+| Estado "Consultando..." | El modelo está pensando | Espere unos segundos |
 
 ## 8. Privacidad
 

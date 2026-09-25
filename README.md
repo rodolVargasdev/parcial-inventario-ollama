@@ -13,12 +13,12 @@ y reportes simples. Todo offline, sin nube.
 - Windows 10/11, 8GB RAM minimo (recomendado 12GB+)
 - Python 3.10+
 - Ollama instalado: https://ollama.com/download
-- Modelo local <=3B: `qwen2.5:3b` (recomendado) o `llama3.2:3b` / `tinyllama`
+- Modelo local <=3B: `qwen3.5:0.8b` 
 
 ## Instalacion
 
 ```bash
-ollama pull qwen2.5:3b
+ollama pull qwen3.5:0.8b
 pip install -r requirements.txt
 python main.py
 ```
@@ -37,10 +37,10 @@ docs/STACK_TECNOLOGICO.md    # Dependencias
 
 ## Funciones (Parte I)
 
-1. Ventana 600x600 fija, colores ferreteros (acero + naranja + carton).
+1. Ventana 600x600 fija, colores verdes.
 2. Boton **Enviar**: consulta a Ollama local.
-3. Boton **Guardar consulta (.txt)**: exporta conversacion.
-4. Boton **Integrantes**: ventana nueva con foto + nombres.
+3. Botón **Guardar en .txt**: exporta conversacion.
+4. Botón **Ver integrantes**: ventana nueva con foto + nombres.
 
 ## Equipo
 
