@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+consulta_inventario_*.txt
+*.jpeg
